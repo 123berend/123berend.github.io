@@ -1,98 +1,506 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>123berend.nl | Berend</title>
-        <!-- Bootstrap core CSS -->
-        <link href="bootstrap_theme/bootstrap.css" rel="stylesheet" type="text/css">
-        <link rel="icon" href="favicon.png" type="image/png">
-        <meta name="description" content="Neem een kijkje in het leven van Berend!">
-        <meta name="keywords" content="Berend, Blog, KloterRP, 123berend, 123Berend, 123berend.n, Berend Cento, Advocatenkantoor, Adcovatuur, BBBNZN, Berend Berend Berend Berend en Zonen">
-        <meta name="author" content="Berend">
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4249480167009338"crossorigin="anonymous"></script>
-    </head>
-    <body title="123berend.nl" data-pg-name="123berend.nl">
-        <header>
-            <div class="collapse bg-dark" id="navbarHeader">
-                <div class="container">
-                    <div class="row">
+<html lang="nl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>TETRIS MASTER - 123berend.nl</title>
+<style>
+  html, body {
+    margin: 0; padding: 0;
+    height: 100%;
+    background: #001f3f;
+    color: #eee;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    user-select: none;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #title {
+    font-size: 4rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #0ff;
+    text-shadow:
+      0 0 10px #0ff,
+      0 0 20px #0ff,
+      0 0 40px #0ff,
+      0 0 80px #00ffffaa;
+    margin: 20px 0 10px 0;
+    user-select: none;
+  }
+  #container {
+    display: flex;
+    width: 98vw;
+    height: 80vh;
+    max-width: 1200px;
+    max-height: 700px;
+    margin-bottom: 20px;
+    gap: 30px;
+    position: relative;
+  }
+  #gameplay {
+    flex: 1 1 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow:
+      inset 0 0 40px #00ffff66,
+      0 0 20px #00ffff88;
+    background: transparent;
+  }
+  canvas {
+    background: #222;
+    image-rendering: pixelated;
+    border: 3px solid #eee;
+    width: 100%;
+    height: 100%;
+    max-width: 480px;
+    max-height: 800px;
+    aspect-ratio: 10 / 20;
+    position: relative;
+    z-index: 2;
+    border-radius: 10px;
+  }
+  #background-canvas {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1;
+    border-radius: 12px;
+  }
+  #sidebar {
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 25px;
+  }
+  #score {
+    font-size: 32px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 1.5px;
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+  }
+  #controls {
+    background: #002a60;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px #004080;
+    font-size: 18px;
+    line-height: 1.6;
+    color: #aeefff;
+  }
+  h2 {
+    margin: 0 0 15px 0;
+    text-align: center;
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 700px) {
+    #container {
+      flex-direction: column;
+      height: auto;
+      max-height: none;
+      width: 95vw;
+    }
+    #sidebar {
+      width: 100%;
+      order: 2;
+      padding-top: 15px;
+    }
+    #gameplay {
+      max-width: 100%;
+      height: 400px;
+      order: 1;
+    }
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+      aspect-ratio: auto;
+      height: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="title">TETRIS MASTER</div>
+<div id="container">
+  <div id="gameplay">
+    <canvas id="background-canvas" width="480" height="800"></canvas>
+    <canvas id="tetris" width="240" height="480"></canvas>
+  </div>
+  <div id="sidebar">
+    <div id="score">Score: 0</div>
+    <div id="controls">
+      <h2>Controls</h2>
+      <p><b>← / A</b> - Move Left</p>
+      <p><b>→ / D</b> - Move Right</p>
+      <p><b>↓ / S</b> - Soft Drop</p>
+      <p><b>↑ / W / X</b> - Rotate</p>
+      <p><b>Space</b> - Hard Drop</p>
+    </div>
+  </div>
 </div>
-                </div>
-            </div>
-            <div class="navbar navbar-dark bg-dark shadow-sm">
-                <div class="container">
-                    <img src="berend/123berend.nl.png" width="227" alt="123berend.nl logo">
-                    <h2 class="text-white">[Work in progress]</h2>
-                    <a href="#" class="navbar-brand d-flex align-items-center"> </a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader" aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-                <h1></h1>
-                <picture></picture>
-            </div>
-        </header>
-        <main>
-            <section class="py-5 text-center container">
-                <div class="row py-lg-5">
-                    <div class="col-lg-6 col-md-8 mx-auto">
-                        <h1 class="fw-light">Neem effe een kijkje in het leven van Berend...</h1>
-                        <p><a href="http://adfoc.us/869178108377695" class="btn btn-primary my-2">KloterRP: FiveM</a>&nbsp;<a href="http://adfoc.us/869178108377987" class="btn btn-secondary my-2">KloterRP: Discord</a></p>
-                    </div>
-                    <div id="wrapper">
-                        <div id="div1">   
-                        </div>
-                            <div id="div2">
-                                <div id="donate-button-container">
-                                <div id="donate-button"></div>
-                                <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
-                                <script>
-                                PayPal.Donation.Button({
-                                env:'production',
-                                hosted_button_id:'FP8A9XFSHHD6A',
-                                image: {
-                                src:'https://www.paypalobjects.com/nl_NL/NL/i/btn/btn_donateCC_LG.gif',
-                                alt:'Doneren met PayPal-knop',
-                                title:'PayPal - The safer, easier way to pay online!',
-                                }
-                                }).render('#donate-button');
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <div class="album py-5 bg-light">
-                <div class="container">
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <img src="berend/Berend_in_ANWB_kleding.png">
-                                <div class="card-body">
-                                    <p class="card-text"><b>Ace Roleplay:</b> Berend is monteur bij Ace Mechanics!</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col">
-                            <div class="card shadow-sm">
-                                <img src="berend/KRPbanner.png">
-                                <div class="card-body">
-                                    <p class="card-text"><b>KloterRP: </b><span>KloterRP is geopend! Join nu en ga kloten!</span></p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-        <footer class="text-muted py-5">
-            <div class="container">
-                <p class="float-end mb-1"> <a href="#">Back to top</a> </p>
-                <p class="mb-1">&copy;2025 123berend.nl</p>
-            </div>
-        </footer>
-        <script src="assets/js/popper.min.js"></script>
-        <script src="bootstrap/js/bootstrap.min.js"></script>
-    </body>
+
+<script>
+(() => {
+  const canvas = document.getElementById('tetris');
+  const ctx = canvas.getContext('2d');
+  const bgCanvas = document.getElementById('background-canvas');
+  const bgCtx = bgCanvas.getContext('2d');
+
+  const COLS = 10;
+  const ROWS = 20;
+  const BLOCK_SIZE = 24;
+
+  canvas.width = COLS * BLOCK_SIZE;
+  canvas.height = ROWS * BLOCK_SIZE;
+
+  bgCanvas.width = 480;
+  bgCanvas.height = 800;
+
+  const AudioCtx = window.AudioContext || window.webkitAudioContext;
+  const audioCtx = new AudioCtx();
+
+  function playSound(freq=440, type='square', duration=0.1, volume=0.15) {
+    if(audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.value = volume;
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+    osc.onended = () => {
+      gain.disconnect();
+      osc.disconnect();
+    };
+  }
+  function playMove() { playSound(400, 'square', 0.05, 0.1); }
+  function playRotate() { playSound(600, 'triangle', 0.08, 0.12); }
+  function playDrop() { playSound(250, 'sine', 0.15, 0.2); }
+  function playLineClear() { playSound(900, 'sawtooth', 0.2, 0.25); }
+  function playGameOver() { playSound(150, 'sine', 0.7, 0.35); }
+
+  const waves = [];
+  const waveCount = 5;
+  for(let i=0; i<waveCount; i++) {
+    waves.push({
+      amplitude: 10 + i * 5,
+      frequency: 0.005 + i * 0.002,
+      phase: 0,
+      speed: 0.002 + i * 0.001,
+      yOffset: bgCanvas.height / 2 + i * 20 - 50,
+      color: `rgba(0, 255, 255, ${0.1 + i*0.1})`
+    });
+  }
+  function drawBackground(time=0) {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.lineWidth = 3;
+    for(const wave of waves) {
+      bgCtx.beginPath();
+      for(let x=0; x < bgCanvas.width; x++) {
+        const y = wave.yOffset + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude;
+        if(x === 0) bgCtx.moveTo(x, y);
+        else bgCtx.lineTo(x, y);
+      }
+      bgCtx.strokeStyle = wave.color;
+      bgCtx.shadowColor = wave.color;
+      bgCtx.shadowBlur = 10;
+      bgCtx.stroke();
+      wave.phase += wave.speed;
+    }
+  }
+
+  function drawBlock(x, y, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+    ctx.strokeStyle = '#222';
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE, BLOCK_SIZE);
+  }
+
+  const board = [];
+  for(let r=0; r<ROWS; r++) {
+    board[r] = new Array(COLS).fill(0);
+  }
+
+  const SHAPES = {
+    I: [
+      [0,0,0,0],
+      [1,1,1,1],
+      [0,0,0,0],
+      [0,0,0,0],
+    ],
+    J: [
+      [1,0,0],
+      [1,1,1],
+      [0,0,0],
+    ],
+    L: [
+      [0,0,1],
+      [1,1,1],
+      [0,0,0],
+    ],
+    O: [
+      [1,1],
+      [1,1],
+    ],
+    S: [
+      [0,1,1],
+      [1,1,0],
+      [0,0,0],
+    ],
+    T: [
+      [0,1,0],
+      [1,1,1],
+      [0,0,0],
+    ],
+    Z: [
+      [1,1,0],
+      [0,1,1],
+      [0,0,0],
+    ],
+  };
+
+  const COLORS = {
+    0: '#111',
+    1: '#0ff',
+    2: '#00f',
+    3: '#f90',
+    4: '#ff0',
+    5: '#0f0',
+    6: '#a0f',
+    7: '#f00',
+  };
+
+  const PIECE_TYPES = ['I','J','L','O','S','T','Z'];
+
+  function rotate(matrix) {
+    const N = matrix.length;
+    const result = [];
+    for(let y=0; y<N; y++) {
+      result[y] = [];
+      for(let x=0; x<N; x++) {
+        result[y][x] = matrix[N - x - 1][y];
+      }
+    }
+    return result;
+  }
+
+  class Piece {
+    constructor(type) {
+      this.type = type;
+      this.matrix = SHAPES[type];
+      this.colorIndex = PIECE_TYPES.indexOf(type) + 1;
+      this.x = Math.floor(COLS/2) - Math.ceil(this.matrix[0].length/2);
+      this.y = 0;
+    }
+    move(dx, dy) {
+      this.x += dx;
+      this.y += dy;
+      if(this.collides()) {
+        this.x -= dx;
+        this.y -= dy;
+        return false;
+      }
+      return true;
+    }
+    rotatePiece() {
+      const old = this.matrix;
+      this.matrix = rotate(this.matrix);
+      if(this.collides()) {
+        if (!this.move(-1, 0) && !this.move(1, 0)) {
+          this.matrix = old;
+          return false;
+        }
+      }
+      return true;
+    }
+    collides() {
+      for(let y=0; y<this.matrix.length; y++) {
+        for(let x=0; x<this.matrix[y].length; x++) {
+          if(this.matrix[y][x]) {
+            let px = this.x + x;
+            let py = this.y + y;
+            if(px < 0 || px >= COLS || py >= ROWS) return true;
+            if(py >= 0 && board[py][px]) return true;
+          }
+        }
+      }
+      return false;
+    }
+    lock() {
+      for(let y=0; y<this.matrix.length; y++) {
+        for(let x=0; x<this.matrix[y].length; x++) {
+          if(this.matrix[y][x]) {
+            let px = this.x + x;
+            let py = this.y + y;
+            if(py >= 0 && py < ROWS && px >= 0 && px < COLS) {
+              board[py][px] = this.colorIndex;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function clearLines() {
+    let linesCleared = 0;
+    outer: for(let y=ROWS-1; y>=0; y--) {
+      for(let x=0; x<COLS; x++) {
+        if(board[y][x] === 0) continue outer;
+      }
+      board.splice(y, 1);
+      board.unshift(new Array(COLS).fill(0));
+      linesCleared++;
+      y++;
+    }
+    return linesCleared;
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for(let y=0; y<ROWS; y++) {
+      for(let x=0; x<COLS; x++) {
+        drawBlock(x, y, COLORS[board[y][x]]);
+      }
+    }
+    for(let y=0; y<currentPiece.matrix.length; y++) {
+      for(let x=0; x<currentPiece.matrix[y].length; x++) {
+        if(currentPiece.matrix[y][x]) {
+          let px = currentPiece.x + x;
+          let py = currentPiece.y + y;
+          if(py >= 0) drawBlock(px, py, COLORS[currentPiece.colorIndex]);
+        }
+      }
+    }
+  }
+
+  const scoreEl = document.getElementById('score');
+  let currentPiece = null;
+  let dropCounter = 0;
+  let dropInterval = 800;
+  let lastTime = 0;
+  let score = 0;
+
+  function resetPiece() {
+    currentPiece = new Piece(PIECE_TYPES[Math.floor(Math.random()*PIECE_TYPES.length)]);
+    if(currentPiece.collides()) {
+      for(let y=0; y<ROWS; y++) board[y].fill(0);
+      score = 0;
+      playGameOver();
+    }
+  }
+
+  const waves = [];
+  const waveCount = 5;
+  for(let i=0; i<waveCount; i++) {
+    waves.push({
+      amplitude: 10 + i * 5,
+      frequency: 0.005 + i * 0.002,
+      phase: 0,
+      speed: 0.002 + i * 0.001,
+      yOffset: bgCanvas.height / 2 + i * 20 - 50,
+      color: `rgba(0, 255, 255, ${0.1 + i*0.1})`
+    });
+  }
+
+  function drawBackground(time=0) {
+    bgCtx.clearRect(0, 0, bgCanvas.width, bgCanvas.height);
+    bgCtx.lineWidth = 3;
+    for(const wave of waves) {
+      bgCtx.beginPath();
+      for(let x=0; x < bgCanvas.width; x++) {
+        const y = wave.yOffset + Math.sin(x * wave.frequency + wave.phase) * wave.amplitude;
+        if(x === 0) bgCtx.moveTo(x, y);
+        else bgCtx.lineTo(x, y);
+      }
+      bgCtx.strokeStyle = wave.color;
+      bgCtx.shadowColor = wave.color;
+      bgCtx.shadowBlur = 10;
+      bgCtx.stroke();
+      wave.phase += wave.speed;
+    }
+  }
+
+  function update(time=0) {
+    const delta = time - lastTime;
+    lastTime = time;
+    dropCounter += delta;
+
+    drawBackground(time);
+
+    if(dropCounter > dropInterval) {
+      if(!currentPiece.move(0, 1)) {
+        currentPiece.lock();
+        const cleared = clearLines();
+        if(cleared) {
+          playLineClear();
+          score += cleared * 100;
+          dropInterval = Math.max(100, dropInterval - cleared * 20);
+        }
+        resetPiece();
+      }
+      dropCounter = 0;
+    }
+
+    draw();
+    scoreEl.textContent = 'Score: ' + score;
+    requestAnimationFrame(update);
+  }
+
+  window.addEventListener('keydown', e => {
+    if(!currentPiece) return;
+    switch(e.code) {
+      case 'ArrowLeft':
+      case 'KeyA':
+        if(currentPiece.move(-1,0)) playMove();
+        break;
+      case 'ArrowRight':
+      case 'KeyD':
+        if(currentPiece.move(1,0)) playMove();
+        break;
+      case 'ArrowDown':
+      case 'KeyS':
+        if(currentPiece.move(0,1)) playMove();
+        break;
+      case 'ArrowUp':
+      case 'KeyW':
+      case 'KeyX':
+        if(currentPiece.rotatePiece()) playRotate();
+        break;
+      case 'Space':
+        while(currentPiece.move(0,1)) {}
+        currentPiece.lock();
+        const cleared = clearLines();
+        if(cleared) {
+          playLineClear();
+          score += cleared * 100;
+          dropInterval = Math.max(100, dropInterval - cleared * 20);
+        }
+        resetPiece();
+        dropCounter = 0;
+        break;
+    }
+  });
+
+  resetPiece();
+  update();
+})();
+</script>
+
+</body>
 </html>
